@@ -1,0 +1,33 @@
+services:
+  contest_db:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: contest_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - contest_postgresql:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  submission_db:
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: submission_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - submission_postgresql:/var/lib/postgresql/data
+    networks:
+      - backend
+
+volumes:
+  contest_postgresql: { }
+  submission_postgresql: { }
+
+networks:
+  backend: { }
