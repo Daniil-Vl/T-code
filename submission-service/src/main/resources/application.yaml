@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: submission-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5433/submission_db
+server:
+  port: 8090
