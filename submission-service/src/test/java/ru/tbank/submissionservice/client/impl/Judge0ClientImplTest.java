@@ -10,14 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.wiremock.spring.EnableWireMock;
 import ru.tbank.submissionservice.PostgreSQLIntegration;
+import ru.tbank.submissionservice.dto.SubmissionRequestBody;
 import ru.tbank.submissionservice.dto.SubmissionResult;
 import ru.tbank.submissionservice.dto.SubmissionToken;
 import ru.tbank.submissionservice.enums.Language;
 import ru.tbank.submissionservice.exception.ServiceException;
 
+import java.util.List;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
-// TODO: Finish this test
 @SpringBootTest(properties = "app.judge0-api-base-url=${wiremock.server.baseUrl}")
 @EnableWireMock
 @Testcontainers
@@ -117,8 +119,70 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
         Assertions.assertEquals(submissionResult, actualSubmissionResult);
     }
 
-    // TODO: Test for submit waiting
-    // TODO: Test for submit batch
+    @Test
+    void givenSubmission_whenSubmitWaiting_thenSuccessfullyGetSubmissionResult() throws JsonProcessingException {
+        // Arrange
+        String sourceCode = "source code";
+        Language language = Language.JAVA;
+        String stdin = "stdin";
+
+        SubmissionResult expectedSubmissionResult = new SubmissionResult(
+                "Hello world",
+                1.0,
+                1.0,
+                "stderr",
+                "compile output",
+                "message",
+                new SubmissionResult.Status(1, "accepted")
+        );
+        String requestBody = objectMapper.writeValueAsString(expectedSubmissionResult);
+
+        stubFor(
+                post("/submissions?base64_encoded=false&wait=true")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBody(requestBody)
+                        )
+        );
+
+        // Act
+        SubmissionResult actualSubmissionResult = client.submitWaiting(sourceCode, language, stdin).block();
+
+        // Assert
+        Assertions.assertEquals(expectedSubmissionResult, actualSubmissionResult);
+    }
+
+    @Test
+    void givenSubmissionBatch_whenSubmitBatch_thenSuccessfullyGetSubmissionTokensBatch() throws JsonProcessingException {
+        // Arrange
+        List<SubmissionRequestBody> submissionRequests = List.of(
+                new SubmissionRequestBody("source code 1", "python", "stdin 1"),
+                new SubmissionRequestBody("source code 2", "java", "stdin 2")
+        );
+        List<SubmissionToken> expectedTokens = List.of(
+                new SubmissionToken("first token"),
+                new SubmissionToken("second token")
+        );
+        String requestBody = objectMapper.writeValueAsString(expectedTokens);
+
+        stubFor(
+                post("/submissions/batch?base64_encoded=false")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBody(requestBody)
+                        )
+        );
+
+        // Act
+        List<SubmissionToken> actualTokens = client.submitBatch(submissionRequests);
+
+        // Assert
+        Assertions.assertIterableEquals(expectedTokens, actualTokens);
+    }
 
     private record Judge0Error(String error) {
     }
