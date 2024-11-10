@@ -81,7 +81,6 @@ public class Judge0ClientImpl implements Judge0Client {
                         uriBuilder -> uriBuilder
                                 .path("/submissions/batch")
                                 .queryParam("base64_encoded", false)
-                                .queryParam("wait", false)
                                 .build()
                 )
                 .bodyValue(requestBody)
