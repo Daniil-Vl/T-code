@@ -37,6 +37,10 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // Cache (Caffeine)
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
     testImplementation 'io.projectreactor:reactor-test'

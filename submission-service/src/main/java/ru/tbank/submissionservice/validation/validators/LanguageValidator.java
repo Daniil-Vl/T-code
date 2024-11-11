@@ -2,21 +2,23 @@ package ru.tbank.submissionservice.validation.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import ru.tbank.submissionservice.enums.Language;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.tbank.submissionservice.service.LanguageService;
 import ru.tbank.submissionservice.validation.annotations.LanguageConstraint;
 
-import java.util.Arrays;
-
+@Component
+@RequiredArgsConstructor
 public class LanguageValidator implements ConstraintValidator<LanguageConstraint, String> {
+
+    private final LanguageService languageService;
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return Arrays
-                .stream(Language.values())
-                .anyMatch(
-                        language -> language.getLanguageName()
-                                .equals(value.toLowerCase())
-                );
+        return languageService
+                .getLanguages()
+                .stream()
+                .anyMatch(lang -> lang.name().equals(value));
     }
 
 }

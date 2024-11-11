@@ -1,20 +1,16 @@
 package ru.tbank.submissionservice.enums;
 
-import lombok.Getter;
+public record Language(
+        int id,
+        String name
+) {
+    public static String getNameWithoutCompiler(String languageName) {
+        int bracketIndex = languageName.lastIndexOf('(');
 
-@Getter
-public enum Language {
-    PYTHON(71, "python"),
-    JAVA(62, "java"),
-    CPP(54, "cpp"),
-    RUBY(72, "ruby"),
-    BASH(46, "bash");
+        if (bracketIndex == -1) {
+            return languageName;
+        }
 
-    private final int languageId;
-    private final String languageName;
-
-    Language(int languageId, String languageName) {
-        this.languageId = languageId;
-        this.languageName = languageName;
+        return languageName.substring(0, bracketIndex - 1);
     }
 }

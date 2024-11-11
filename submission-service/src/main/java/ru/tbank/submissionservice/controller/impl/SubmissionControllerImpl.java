@@ -7,8 +7,9 @@ import ru.tbank.submissionservice.controller.SubmissionController;
 import ru.tbank.submissionservice.dto.SubmissionRequestBody;
 import ru.tbank.submissionservice.dto.SubmissionResult;
 import ru.tbank.submissionservice.dto.SubmissionToken;
-import ru.tbank.submissionservice.enums.Language;
 import ru.tbank.submissionservice.service.SubmissionService;
+
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,14 +22,14 @@ public class SubmissionControllerImpl implements SubmissionController {
     public SubmissionToken submit(SubmissionRequestBody submissionRequestBody) {
         return submissionService.submit(
                 submissionRequestBody.sourceCode(),
-                Language.valueOf(submissionRequestBody.language().toUpperCase()),
+                submissionRequestBody.language(),
                 submissionRequestBody.stdin()
         );
     }
 
     @Override
-    public SubmissionResult getSubmissionResult(String submissionToken) {
-        return null;
+    public SubmissionResult getSubmissionResult(String submissionToken) throws InterruptedException, ExecutionException {
+        return submissionService.getSubmissionResult(submissionToken).get();
     }
 
 }

@@ -5,12 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.cache.CacheManager;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.wiremock.spring.EnableWireMock;
 import ru.tbank.submissionservice.PostgreSQLIntegration;
-import ru.tbank.submissionservice.dto.SubmissionRequestBody;
+import ru.tbank.submissionservice.dto.SubmissionRequestDTO;
 import ru.tbank.submissionservice.dto.SubmissionResult;
 import ru.tbank.submissionservice.dto.SubmissionToken;
 import ru.tbank.submissionservice.enums.Language;
@@ -19,6 +23,7 @@ import ru.tbank.submissionservice.exception.ServiceException;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.mockito.Mockito.times;
 
 @SpringBootTest(properties = "app.judge0-api-base-url=${wiremock.server.baseUrl}")
 @EnableWireMock
@@ -31,11 +36,17 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @SpyBean
+    private WebClient webClient;
+
+    @Autowired
+    private CacheManager cacheManager;
+
     @Test
     void givenSubmission_whenSubmit_thenSuccessfullyGetSubmissionToken() throws JsonProcessingException {
         // Arrange
         String sourceCode = "source code";
-        Language language = Language.JAVA;
+        int languageId = 1;
         String stdin = "stdin";
 
         SubmissionToken token = new SubmissionToken("token");
@@ -52,7 +63,7 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
         );
 
         // Act
-        SubmissionToken submissionToken = client.submit(sourceCode, language, stdin);
+        SubmissionToken submissionToken = client.submit(sourceCode, languageId, stdin);
 
         // Assert
         Assertions.assertNotNull(submissionToken.token());
@@ -62,7 +73,7 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
     void givenFullQueueInJudge0_whenSubmit_thenRetry3TimesAndThrowServiceException() throws JsonProcessingException {
         // Arrange
         String sourceCode = "source code";
-        Language language = Language.JAVA;
+        int languageId = 1;
         String stdin = "stdin";
 
         String requestBody = objectMapper.writeValueAsString(new Judge0Error("queue is full"));
@@ -81,7 +92,7 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
         // Act + Assert
         Assertions.assertThrows(
                 ServiceException.class,
-                () -> client.submit(sourceCode, language, stdin)
+                () -> client.submit(sourceCode, languageId, stdin)
         );
         WireMock.verify(4, postRequestedFor(urlEqualTo(testUrl)));
     }
@@ -123,7 +134,7 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
     void givenSubmission_whenSubmitWaiting_thenSuccessfullyGetSubmissionResult() throws JsonProcessingException {
         // Arrange
         String sourceCode = "source code";
-        Language language = Language.JAVA;
+        int languageId = 1;
         String stdin = "stdin";
 
         SubmissionResult expectedSubmissionResult = new SubmissionResult(
@@ -148,7 +159,7 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
         );
 
         // Act
-        SubmissionResult actualSubmissionResult = client.submitWaiting(sourceCode, language, stdin).block();
+        SubmissionResult actualSubmissionResult = client.submitWaiting(sourceCode, languageId, stdin).block();
 
         // Assert
         Assertions.assertEquals(expectedSubmissionResult, actualSubmissionResult);
@@ -157,9 +168,9 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
     @Test
     void givenSubmissionBatch_whenSubmitBatch_thenSuccessfullyGetSubmissionTokensBatch() throws JsonProcessingException {
         // Arrange
-        List<SubmissionRequestBody> submissionRequests = List.of(
-                new SubmissionRequestBody("source code 1", "python", "stdin 1"),
-                new SubmissionRequestBody("source code 2", "java", "stdin 2")
+        List<SubmissionRequestDTO> submissionRequests = List.of(
+                new SubmissionRequestDTO("source code 1", 1, "stdin 1"),
+                new SubmissionRequestDTO("source code 2", 2, "stdin 2")
         );
         List<SubmissionToken> expectedTokens = List.of(
                 new SubmissionToken("first token"),
@@ -182,6 +193,73 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
 
         // Assert
         Assertions.assertIterableEquals(expectedTokens, actualTokens);
+    }
+
+    @Test
+    void given_whenGetLanguages_thenSuccessfullyRetrievedLanguages() throws JsonProcessingException {
+        // Arrange
+        List<Language> languages = List.of(
+                new Language(1, "java (openjdk 21)"),
+                new Language(2, "python (python 3.8.1)"),
+                new Language(3, "cpp (gcc 8.1.0)"),
+                new Language(4, "Common Lisp (SBCL 2.0.0)")
+        );
+        List<Language> expectedLanguages = List.of(
+                new Language(1, "java"),
+                new Language(2, "python"),
+                new Language(3, "cpp"),
+                new Language(4, "common lisp")
+        );
+        String requestBody = objectMapper.writeValueAsString(languages);
+
+
+        stubFor(
+                get("/languages")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBody(requestBody)
+                        )
+        );
+
+        // Act
+        List<Language> actualLanguages = client.getLanguages();
+
+        // Assert
+        Assertions.assertIterableEquals(expectedLanguages, actualLanguages);
+    }
+
+    @Test
+    void given_whenGetLanguagesTwoTimes_thenRequestLanguagesAndSecondGetFromCache() throws JsonProcessingException {
+        // Arrange
+        cacheManager.getCache("languages-cache").clear();
+
+        List<Language> languages = List.of(
+                new Language(1, "java (openjdk 21)"),
+                new Language(2, "python (python 3.8.1)"),
+                new Language(3, "cpp (gcc 8.1.0)"),
+                new Language(4, "Common Lisp (SBCL 2.0.0)")
+        );
+        String requestBody = objectMapper.writeValueAsString(languages);
+
+        stubFor(
+                get("/languages")
+                        .willReturn(
+                                aResponse()
+                                        .withStatus(200)
+                                        .withHeader("Content-Type", "application/json")
+                                        .withBody(requestBody)
+                        )
+        );
+
+        // Act
+        client.getLanguages();
+        client.getLanguages();
+
+
+        // Assert
+        Mockito.verify(webClient, times(1)).get();
     }
 
     private record Judge0Error(String error) {

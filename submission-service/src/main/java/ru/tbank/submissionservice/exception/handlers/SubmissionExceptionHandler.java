@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.tbank.submissionservice.dto.ApiErrorResponse;
+import ru.tbank.submissionservice.exception.InvalidLanguageException;
 import ru.tbank.submissionservice.exception.ServiceException;
 
 import java.util.stream.Collectors;
@@ -30,6 +31,15 @@ public class SubmissionExceptionHandler {
     public ApiErrorResponse handleServiceException(ServiceException exception) {
         return new ApiErrorResponse(
                 exception.getStatusCode(),
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(value = InvalidLanguageException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleInvalidLanguageException(InvalidLanguageException exception) {
+        return new ApiErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
                 exception.getMessage()
         );
     }

@@ -1,15 +1,15 @@
 package ru.tbank.submissionservice.client.impl;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 import ru.tbank.submissionservice.client.Judge0Client;
-import ru.tbank.submissionservice.dto.SubmissionRequestBody;
+import ru.tbank.submissionservice.dto.SubmissionRequestDTO;
 import ru.tbank.submissionservice.dto.SubmissionResult;
 import ru.tbank.submissionservice.dto.SubmissionToken;
 import ru.tbank.submissionservice.enums.Language;
@@ -25,10 +25,10 @@ public class Judge0ClientImpl implements Judge0Client {
     private final Retry retry;
 
     @Override
-    public SubmissionToken submit(String sourceCode, Language language, String stdin) {
+    public SubmissionToken submit(String sourceCode, int languageId, String stdin) {
         log.info("Submitting to judge0");
 
-        SubmissionRequestDTO requestBody = new SubmissionRequestDTO(sourceCode, language.getLanguageId(), stdin);
+        SubmissionRequestDTO requestBody = new SubmissionRequestDTO(sourceCode, languageId, stdin);
 
         return webClient
                 .post()
@@ -47,10 +47,10 @@ public class Judge0ClientImpl implements Judge0Client {
     }
 
     @Override
-    public Mono<SubmissionResult> submitWaiting(String sourceCode, Language language, String stdin) {
+    public Mono<SubmissionResult> submitWaiting(String sourceCode, int languageId, String stdin) {
         log.info("Submitting to judge0 with waiting");
 
-        SubmissionRequestDTO requestBody = new SubmissionRequestDTO(sourceCode, language.getLanguageId(), stdin);
+        SubmissionRequestDTO requestBody = new SubmissionRequestDTO(sourceCode, languageId, stdin);
 
         return webClient
                 .post()
@@ -68,12 +68,10 @@ public class Judge0ClientImpl implements Judge0Client {
     }
 
     @Override
-    public List<SubmissionToken> submitBatch(List<SubmissionRequestBody> submissionRequests) {
+    public List<SubmissionToken> submitBatch(List<SubmissionRequestDTO> submissionRequests) {
         log.info("Submitting batch to judge0");
 
-        SubmissionBatchDTO requestBody = new SubmissionBatchDTO(
-                submissionRequests.stream().map(SubmissionRequestDTO::from).toList()
-        );
+        SubmissionBatchDTO requestBody = new SubmissionBatchDTO(submissionRequests);
 
         return webClient
                 .post()
@@ -109,21 +107,29 @@ public class Judge0ClientImpl implements Judge0Client {
                 .block();
     }
 
-    private record SubmissionRequestDTO(
-            @JsonProperty("source_code")
-            String sourceCode,
-            @JsonProperty("language_id")
-            int languageId,
-            @JsonProperty("stdin")
-            String stdin
-    ) {
-        public static SubmissionRequestDTO from(SubmissionRequestBody submissionRequestBody) {
-            return new SubmissionRequestDTO(
-                    submissionRequestBody.sourceCode(),
-                    Language.valueOf(submissionRequestBody.language().toUpperCase()).getLanguageId(),
-                    submissionRequestBody.stdin()
-            );
-        }
+    @Override
+    @Cacheable(cacheNames = "languages-cache")
+    public List<Language> getLanguages() {
+        log.info("Request available languages from judge0...");
+
+        List<Language> languages = webClient
+                .get()
+                .uri("/languages")
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<Language>>() {
+                })
+                .retryWhen(retry)
+                .block();
+
+        return languages
+                .stream()
+                .map(
+                        language -> new Language(
+                                language.id(),
+                                Language.getNameWithoutCompiler(language.name()).toLowerCase()
+                        )
+                )
+                .toList();
     }
 
     private record SubmissionBatchDTO(List<SubmissionRequestDTO> submissions) {

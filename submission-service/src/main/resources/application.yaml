@@ -5,12 +5,16 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
-    url: jdbc:postgresql://192.168.31.120:5433/submission_db
+    url: jdbc:postgresql://localhost:5433/submission_db
+  cache:
+    cache-names: "languages-cache"
+    caffeine:
+      spec: "expireAfterWrite=24h"
 server:
   port: 8090
 
 app:
-  judge0-api-base-url: http://192.168.31.120:2358
+  judge0-api-base-url: http://localhost:2358
   retry:
     retry-max-attempts: 3
     retry-min-time: 1s
