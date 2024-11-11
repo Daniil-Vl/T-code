@@ -21,8 +21,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class SubmissionServiceImpl implements SubmissionService {
 
-    private static final String IN_QUEUE_STATUS_MESSAGE = "In Queue";
-    private static final String PROCESSING_STATUS_MESSAGE = "Processing";
+
 
     private final Judge0Client judge0Client;
     private final LanguageService languageService;
@@ -69,19 +68,13 @@ public class SubmissionServiceImpl implements SubmissionService {
 
         // TODO: Fix busy waiting
         log.info("Start waiting for submission processing...");
-        while (!isSubmissionReady(submissionResult)) {
+        while (!submissionResult.isCompleted()) {
             Thread.sleep(10);
             submissionResult = judge0Client.getSubmissionResult(submissionToken);
         }
         log.info("Submission status and result retrieved");
 
         return CompletableFuture.completedFuture(submissionResult);
-    }
-
-    private boolean isSubmissionReady(SubmissionResult submissionResult) {
-        String description = submissionResult.status().description();
-        return !description.equals(IN_QUEUE_STATUS_MESSAGE)
-                && !description.equals(PROCESSING_STATUS_MESSAGE);
     }
 
 }

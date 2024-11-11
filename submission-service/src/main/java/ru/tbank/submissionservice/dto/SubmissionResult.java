@@ -16,6 +16,15 @@ public record SubmissionResult(
         String message,
         Status status
 ) {
+    private static final String IN_QUEUE_STATUS_MESSAGE = "In Queue";
+    private static final String PROCESSING_STATUS_MESSAGE = "Processing";
+
+    public boolean isCompleted() {
+        String description = status().description();
+        return !description.equals(IN_QUEUE_STATUS_MESSAGE)
+                && !description.equals(PROCESSING_STATUS_MESSAGE);
+    }
+
     public record Status(long id, String description) {
     }
 }
