@@ -44,4 +44,13 @@ public class SubmissionExceptionHandler {
         );
     }
 
+    @ExceptionHandler(value = Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiErrorResponse handleException(Exception exception) {
+        return new ApiErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                exception.getMessage()
+        );
+    }
+
 }
