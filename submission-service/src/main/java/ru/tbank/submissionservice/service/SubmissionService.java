@@ -6,7 +6,6 @@ import ru.tbank.submissionservice.dto.SubmissionResult;
 import ru.tbank.submissionservice.dto.SubmissionToken;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public interface SubmissionService {
     SubmissionToken submit(String sourceCode, String language, String stdin);
@@ -15,5 +14,5 @@ public interface SubmissionService {
 
     List<SubmissionToken> submitBatch(List<SubmissionRequestBody> requests);
 
-    CompletableFuture<SubmissionResult> getSubmissionResult(String submissionToken) throws InterruptedException;
+    SubmissionResult getSubmissionResult(String submissionToken);
 }

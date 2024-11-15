@@ -9,8 +9,6 @@ import ru.tbank.submissionservice.dto.SubmissionResult;
 import ru.tbank.submissionservice.dto.SubmissionToken;
 import ru.tbank.submissionservice.service.SubmissionService;
 
-import java.util.concurrent.ExecutionException;
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -28,8 +26,8 @@ public class SubmissionControllerImpl implements SubmissionController {
     }
 
     @Override
-    public SubmissionResult getSubmissionResult(String submissionToken) throws InterruptedException, ExecutionException {
-        return submissionService.getSubmissionResult(submissionToken).get();
+    public SubmissionResult getSubmissionResult(String submissionToken) {
+        return submissionService.getSubmissionResult(submissionToken);
     }
 
 }
