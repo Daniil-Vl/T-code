@@ -12,6 +12,7 @@ public record SubmissionResult(
         Double runningMemoryKB,
 
         String stderr,
+        String token,
         String compileOutput,
         String message,
         Status status

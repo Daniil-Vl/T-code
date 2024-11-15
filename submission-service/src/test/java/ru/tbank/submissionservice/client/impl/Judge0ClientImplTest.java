@@ -107,6 +107,7 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
                 1.0,
                 1.0,
                 "stderr",
+                "token",
                 "compile output",
                 "message",
                 new SubmissionResult.Status(1, "accepted")
@@ -142,6 +143,7 @@ class Judge0ClientImplTest extends PostgreSQLIntegration {
                 1.0,
                 1.0,
                 "stderr",
+                "token",
                 "compile output",
                 "message",
                 new SubmissionResult.Status(1, "accepted")
