@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 public interface SubmissionController {
 
     @PostMapping
-    SubmissionToken submit(
+    SubmissionToken saveSubmissionResult(
             @RequestBody @Valid SubmissionRequestBody submissionRequestBody
     );
 
@@ -21,5 +21,10 @@ public interface SubmissionController {
     SubmissionResult getSubmissionResult(
             @PathVariable(name = "submission_token") @NotBlank String submissionToken
     ) throws InterruptedException, ExecutionException;
+
+    @PutMapping("/submit")
+    void saveSubmissionResult(
+            @RequestBody @Valid SubmissionResult submissionResult
+    );
 
 }

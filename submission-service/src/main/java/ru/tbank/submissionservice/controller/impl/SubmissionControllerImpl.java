@@ -17,7 +17,7 @@ public class SubmissionControllerImpl implements SubmissionController {
     private final SubmissionService submissionService;
 
     @Override
-    public SubmissionToken submit(SubmissionRequestBody submissionRequestBody) {
+    public SubmissionToken saveSubmissionResult(SubmissionRequestBody submissionRequestBody) {
         return submissionService.submit(
                 submissionRequestBody.sourceCode(),
                 submissionRequestBody.language(),
@@ -28,6 +28,13 @@ public class SubmissionControllerImpl implements SubmissionController {
     @Override
     public SubmissionResult getSubmissionResult(String submissionToken) {
         return submissionService.getSubmissionResult(submissionToken);
+    }
+
+    @Override
+    public void saveSubmissionResult(SubmissionResult submissionResult) {
+        log.info("Get submission result from judge0");
+        log.info("Submission result body: {}", submissionResult);
+        // TODO: Implement this
     }
 
 }
