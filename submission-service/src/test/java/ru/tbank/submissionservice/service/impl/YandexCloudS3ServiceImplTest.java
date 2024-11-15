@@ -8,24 +8,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ResourceUtils;
 import ru.tbank.submissionservice.client.YandexCloudS3Client;
 import ru.tbank.submissionservice.config.ApplicationConfig;
 import ru.tbank.submissionservice.dto.TestCase;
 import ru.tbank.submissionservice.exception.InvalidTestCases;
-import ru.tbank.submissionservice.service.YandexCloudS3Service;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class YandexCloudS3ServiceImplTest {
