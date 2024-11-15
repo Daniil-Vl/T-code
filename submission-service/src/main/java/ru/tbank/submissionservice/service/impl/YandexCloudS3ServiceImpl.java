@@ -66,7 +66,7 @@ public class YandexCloudS3ServiceImpl implements YandexCloudS3Service {
             String filename = zipEntry.getName();
             String strContent = new String(bytes, StandardCharsets.UTF_8);
 
-            Matcher numberMatcher = NUMBER_PATTERN.matcher(strContent);
+            Matcher numberMatcher = NUMBER_PATTERN.matcher(filename);
 
             if (!numberMatcher.find()) {
                 log.error("File hasn't number: {}", filename);
