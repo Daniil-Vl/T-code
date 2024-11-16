@@ -17,14 +17,4 @@ public interface SubmissionController {
             @RequestBody @Valid SubmissionRequestBody submissionRequestBody
     );
 
-    @GetMapping("/{submission_token}")
-    SubmissionResult getSubmissionResult(
-            @PathVariable(name = "submission_token") @NotBlank String submissionToken
-    ) throws InterruptedException, ExecutionException;
-
-    @PutMapping("/submit")
-    void saveSubmissionResult(
-            @RequestBody @Valid SubmissionResult submissionResult
-    );
-
 }
