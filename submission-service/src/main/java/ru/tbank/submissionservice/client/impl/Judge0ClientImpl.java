@@ -108,6 +108,25 @@ public class Judge0ClientImpl implements Judge0Client {
     }
 
     @Override
+    public List<SubmissionResult> getBatchSubmissionResults(List<SubmissionToken> tokens) {
+        log.info("Getting submission results from judge0 for multiple tokens");
+        return webClient
+                .get()
+                .uri(
+                        uriBuilder -> uriBuilder
+                                .path("/submissions/batch")
+                                .queryParam("base64_encoded", false)
+                                .queryParam("tokens", String.join(",", tokens.stream().map(SubmissionToken::token).toList()))
+                                .build()
+                )
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<SubmissionResult>>() {
+                })
+                .retryWhen(retry)
+                .block();
+    }
+
+    @Override
     @Cacheable(cacheNames = "languages-cache")
     public List<Language> getLanguages() {
         log.info("Request available languages from judge0...");

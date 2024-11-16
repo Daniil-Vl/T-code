@@ -14,7 +14,10 @@ public record ApplicationConfig(
         String judge0ApiBaseUrl,
 
         @NotNull
-        Retry retry
+        Retry retry,
+
+        @NotNull
+        Scheduling scheduling
 ) {
     public record Retry(
             @NotNull
@@ -27,6 +30,12 @@ public record ApplicationConfig(
             @DecimalMin(value = "0.0")
             @DecimalMax(value = "1.0")
             BigDecimal jitterFactor
+    ) {
+    }
+
+    public record Scheduling(
+            @Positive
+            int numberOfThreads
     ) {
     }
 }

@@ -17,5 +17,7 @@ public interface Judge0Client {
 
     SubmissionResult getSubmissionResult(String submissionToken);
 
+    List<SubmissionResult> getBatchSubmissionResults(List<SubmissionToken> tokens);
+
     List<Language> getLanguages();
 }

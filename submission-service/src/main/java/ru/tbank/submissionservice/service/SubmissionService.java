@@ -14,5 +14,5 @@ public interface SubmissionService {
 
     List<SubmissionToken> submitBatch(List<SubmissionRequestBody> requests);
 
-    SubmissionResult getSubmissionResult(String submissionToken);
+    List<SubmissionResult> getBatchSubmissionResult(List<SubmissionToken> tokens);
 }

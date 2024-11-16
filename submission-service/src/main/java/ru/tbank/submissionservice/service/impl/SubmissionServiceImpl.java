@@ -59,9 +59,8 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
-    public SubmissionResult getSubmissionResult(String submissionToken) {
-        // TODO: Implement this method after connecting database
-        throw new UnsupportedOperationException("Get submission result is not supported yet");
+    public List<SubmissionResult> getBatchSubmissionResult(List<SubmissionToken> tokens) {
+        return judge0Client.getBatchSubmissionResults(tokens);
     }
 
 }
