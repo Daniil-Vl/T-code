@@ -25,6 +25,22 @@ services:
     networks:
       - backend
 
+  liquibase-submission-db-migrations:
+    image: liquibase/liquibase:4.25
+    depends_on:
+      - submission_db
+    command:
+      - --changelog-file=master.yml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://submission_db:5432/submission_db
+      - --username=postgres
+      - --password=postgres
+      - update
+    volumes:
+      - ./submission-service/src/main/resources/migrations:/liquibase/changelog
+    networks:
+      - backend
+
 volumes:
   contest_postgresql: { }
   submission_postgresql: { }
