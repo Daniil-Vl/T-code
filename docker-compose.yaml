@@ -35,6 +35,8 @@ services:
   #  Judge0
   judge0-server:
     image: judge0/judge0:1.13.1
+    hostname: judge0-server
+    container_name: judge0-server
     volumes:
       - ./judge0.conf:/judge0.conf:ro
     ports:
@@ -42,26 +44,38 @@ services:
     privileged: true
     <<: *default-logging
     restart: always
+    networks:
+      - judge0
 
   judge0-workers:
     image: judge0/judge0:1.13.1
+    hostname: judge0-workers
+    container_name: judge0-workers
     command: [ "./scripts/workers" ]
     volumes:
       - ./judge0.conf:/judge0.conf:ro
     privileged: true
     <<: *default-logging
     restart: always
+    networks:
+      - judge0
 
   judge0-db:
     image: postgres:16.2
     env_file: judge0.conf
+    hostname: judge0-db
+    container_name: judge0-db
     volumes:
       - judge0-data:/var/lib/postgresql/data/
     <<: *default-logging
     restart: always
+    networks:
+      - judge0
 
   judge0-redis:
     image: redis:7.2.4
+    hostname: judge0-redis
+    container_name: judge0-redis
     command: [
       "bash", "-c",
       'docker-entrypoint.sh --appendonly no --requirepass "$$REDIS_PASSWORD"'
@@ -69,7 +83,8 @@ services:
     env_file: judge0.conf
     <<: *default-logging
     restart: always
-
+    networks:
+      - judge0
 
 
 volumes:
@@ -79,3 +94,4 @@ volumes:
 
 networks:
   backend: { }
+  judge0: { }
