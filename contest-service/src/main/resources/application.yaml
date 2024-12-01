@@ -6,5 +6,27 @@ spring:
     username: postgres
     password: postgres
     url: jdbc:postgresql://localhost:5432/contest_db
+  jpa:
+    show-sql: true
+  devtools:
+    restart:
+      enabled: true
+
 server:
   port: 8080
+  error:
+    include-stacktrace: never
+    include-path: never
+    include-binding-errors: never
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+
+app:
+  submission-service-url: ${SUBMISSION_SERVICE_BASE_URL}
+  cache:
+    language:
+      cache-name: language-cache
+      expire-after-write: 1h
