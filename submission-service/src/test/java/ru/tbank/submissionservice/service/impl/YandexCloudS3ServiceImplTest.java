@@ -12,7 +12,7 @@ import org.springframework.util.ResourceUtils;
 import ru.tbank.submissionservice.client.YandexCloudS3Client;
 import ru.tbank.submissionservice.config.ApplicationConfig;
 import ru.tbank.submissionservice.dto.TestCase;
-import ru.tbank.submissionservice.exception.InvalidTestCases;
+import ru.tbank.submissionservice.exception.InvalidTestCasesException;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,7 +103,7 @@ class YandexCloudS3ServiceImplTest {
         );
 
         // Act + Assert
-        Assertions.assertThrows(InvalidTestCases.class, () -> service.getTestCases(problemId));
+        Assertions.assertThrows(InvalidTestCasesException.class, () -> service.getTestCases(problemId));
         Mockito.verify(client)
                 .getFileContent(applicationConfig.yandexCloud().testArchiveBucketName(), key);
     }
@@ -121,7 +121,7 @@ class YandexCloudS3ServiceImplTest {
         );
 
         // Act + Assert
-        Assertions.assertThrows(InvalidTestCases.class, () -> service.getTestCases(problemId));
+        Assertions.assertThrows(InvalidTestCasesException.class, () -> service.getTestCases(problemId));
         Mockito.verify(client)
                 .getFileContent(applicationConfig.yandexCloud().testArchiveBucketName(), key);
     }

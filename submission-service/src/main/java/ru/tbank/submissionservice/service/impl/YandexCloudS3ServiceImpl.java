@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.tbank.submissionservice.client.YandexCloudS3Client;
 import ru.tbank.submissionservice.config.ApplicationConfig;
 import ru.tbank.submissionservice.dto.TestCase;
-import ru.tbank.submissionservice.exception.InvalidTestCases;
+import ru.tbank.submissionservice.exception.InvalidTestCasesException;
 import ru.tbank.submissionservice.service.YandexCloudS3Service;
 
 import java.io.ByteArrayInputStream;
@@ -70,7 +70,7 @@ public class YandexCloudS3ServiceImpl implements YandexCloudS3Service {
 
             if (!numberMatcher.find()) {
                 log.error("File hasn't number: {}", filename);
-                throw new InvalidTestCases("File hasn't number: " + filename);
+                throw new InvalidTestCasesException("File hasn't number: " + filename);
             }
 
             int fileNumber = Integer.parseInt(numberMatcher.group());
@@ -122,7 +122,7 @@ public class YandexCloudS3ServiceImpl implements YandexCloudS3Service {
         for (TestCase testCase : testCases) {
             if (testCase.getInput() == null || testCase.getOutput() == null) {
                 log.error("Some test case hasn't input or output: {}", testCase);
-                throw new InvalidTestCases("Test case input or output wasn't found in archive");
+                throw new InvalidTestCasesException("Test case input or output wasn't found in archive");
             }
         }
     }
