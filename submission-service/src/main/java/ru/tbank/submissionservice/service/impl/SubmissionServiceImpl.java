@@ -20,7 +20,6 @@ public class SubmissionServiceImpl implements SubmissionService {
     private final SubmissionRepository submissionRepository;
 
     @Override
-    @Transactional
     public SubmissionEntity createSubmission(long userId, long contestId, long problemId, String codeKey, OffsetDateTime submittedAt) {
         SubmissionEntity submission = SubmissionEntity.builder()
                 .userId(userId)
