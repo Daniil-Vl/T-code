@@ -6,6 +6,10 @@ spring:
     username: postgres
     password: postgres
     url: jdbc:postgresql://localhost:5433/submission_db
+  cache:
+    cache-names: "languages-cache"
+    caffeine:
+      spec: "expireAfterWrite=24h"
 server:
   port: 8090
 
@@ -15,3 +19,10 @@ app:
     secret-access-key: ${YANDEX_CLOUD_S3_SECRET_ACCESS_KEY}
     submission-source-code-bucket-name: submission-source-code
     test-archive-bucket-name: test-case-archive
+  judge0-api-base-url: http://localhost:2358
+  scheduling:
+    number-of-threads: 4
+  retry:
+    retry-max-attempts: 3
+    retry-min-time: 1s
+    jitter-factor: 0.75
