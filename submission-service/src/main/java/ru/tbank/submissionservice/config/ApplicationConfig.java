@@ -1,11 +1,13 @@
 package ru.tbank.submissionservice.config;
 
-import jakarta.validation.constraints.*;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+
 
 @Validated
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
@@ -17,7 +19,10 @@ public record ApplicationConfig(
         Retry retry,
 
         @NotNull
-        Scheduling scheduling
+        Scheduling scheduling,
+        
+        @NotNull
+        YandexCloud yandexCloud
 ) {
     public record Retry(
             @NotNull
@@ -36,6 +41,14 @@ public record ApplicationConfig(
     public record Scheduling(
             @Positive
             int numberOfThreads
+    ) {
+    }
+    
+    public record YandexCloud(
+            @NotBlank String accessKeyId,
+            @NotBlank String secretAccessKey,
+            @NotBlank String submissionSourceCodeBucketName,
+            @NotBlank String testArchiveBucketName
     ) {
     }
 }

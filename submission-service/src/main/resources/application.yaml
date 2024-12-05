@@ -14,6 +14,11 @@ server:
   port: 8090
 
 app:
+  yandex-cloud:
+    access-key-id: ${YANDEX_CLOUD_S3_ACCESS_KEY_ID}
+    secret-access-key: ${YANDEX_CLOUD_S3_SECRET_ACCESS_KEY}
+    submission-source-code-bucket-name: submission-source-code
+    test-archive-bucket-name: test-case-archive
   judge0-api-base-url: http://localhost:2358
   scheduling:
     number-of-threads: 4
