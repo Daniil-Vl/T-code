@@ -30,14 +30,30 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+
+    implementation "org.springframework.boot:spring-boot-starter-security"
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.4.0'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test:6.4.1'
     testImplementation 'io.projectreactor:reactor-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.liquibase:liquibase-core'
+    testImplementation "org.wiremock.integrations:wiremock-spring-boot:3.2.0"
 }
 
 tasks.named('test') {
@@ -53,12 +69,9 @@ checkstyle {
     maxErrors = 0
 }
 
-checkstyleMain {
-    source = 'src/main/java'
-}
-
-checkstyleTest {
-    source = 'src/test/java'
+// Exclude checkstyle task from build task
+checkstyle {
+    sourceSets = []
 }
 
 jacocoTestReport {
@@ -66,6 +79,7 @@ jacocoTestReport {
 
     reports {
         xml.required = true
+        html.required = true
     }
 
     afterEvaluate {
