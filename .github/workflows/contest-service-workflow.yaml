@@ -74,6 +74,8 @@ jobs:
   docker:
     name: docker-build-push
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     needs: [build, checkstyle]
 
     steps:
