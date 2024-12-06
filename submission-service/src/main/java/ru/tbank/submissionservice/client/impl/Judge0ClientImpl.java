@@ -21,6 +21,14 @@ import java.util.List;
 @Slf4j
 public class Judge0ClientImpl implements Judge0Client {
 
+    private static final String LANGUAGES_PATH = "/languages";
+    private static final String SUBMISSION_PATH = "/submissions";
+    private static final String SUBMISSION_BATCH_PATH = "/submissions/batch";
+    private static final String SUBMISSION_TOKEN_PATH = "/submissions/{submission_token}";
+    private static final String BASE64_ENCODED_PARAM_NAME = "base64_encoded";
+    private static final String WAIT_PARAM_NAME = "wait";
+    private static final String TOKENS_PARAM_NAME = "tokens";
+
     private final WebClient webClient;
     private final Retry retry;
 
@@ -34,9 +42,9 @@ public class Judge0ClientImpl implements Judge0Client {
                 .post()
                 .uri(
                         uriBuilder -> uriBuilder
-                                .path("/submissions")
-                                .queryParam("base64_encoded", false)
-                                .queryParam("wait", false)
+                                .path(SUBMISSION_PATH)
+                                .queryParam(BASE64_ENCODED_PARAM_NAME, false)
+                                .queryParam(WAIT_PARAM_NAME, false)
                                 .build()
                 )
                 .bodyValue(requestBody)
@@ -56,9 +64,9 @@ public class Judge0ClientImpl implements Judge0Client {
                 .post()
                 .uri(
                         uriBuilder -> uriBuilder
-                                .path("/submissions")
-                                .queryParam("base64_encoded", false)
-                                .queryParam("wait", true)
+                                .path(SUBMISSION_PATH)
+                                .queryParam(BASE64_ENCODED_PARAM_NAME, false)
+                                .queryParam(WAIT_PARAM_NAME, true)
                                 .build()
                 )
                 .bodyValue(requestBody)
@@ -77,8 +85,8 @@ public class Judge0ClientImpl implements Judge0Client {
                 .post()
                 .uri(
                         uriBuilder -> uriBuilder
-                                .path("/submissions/batch")
-                                .queryParam("base64_encoded", false)
+                                .path(SUBMISSION_BATCH_PATH)
+                                .queryParam(BASE64_ENCODED_PARAM_NAME, false)
                                 .build()
                 )
                 .bodyValue(requestBody)
@@ -98,7 +106,7 @@ public class Judge0ClientImpl implements Judge0Client {
                 .get()
                 .uri(
                         uriBuilder -> uriBuilder
-                                .path("/submissions/{submission_token}")
+                                .path(SUBMISSION_TOKEN_PATH)
                                 .build(submissionToken)
                 )
                 .retrieve()
@@ -114,9 +122,9 @@ public class Judge0ClientImpl implements Judge0Client {
                 .get()
                 .uri(
                         uriBuilder -> uriBuilder
-                                .path("/submissions/batch")
-                                .queryParam("base64_encoded", false)
-                                .queryParam("tokens", String.join(",", tokens.stream().map(SubmissionToken::token).toList()))
+                                .path(SUBMISSION_BATCH_PATH)
+                                .queryParam(BASE64_ENCODED_PARAM_NAME, false)
+                                .queryParam(TOKENS_PARAM_NAME, String.join(",", tokens.stream().map(SubmissionToken::token).toList()))
                                 .build()
                 )
                 .retrieve()
@@ -133,7 +141,7 @@ public class Judge0ClientImpl implements Judge0Client {
 
         List<Language> languages = webClient
                 .get()
-                .uri("/languages")
+                .uri(LANGUAGES_PATH)
                 .retrieve()
                 .bodyToMono(new ParameterizedTypeReference<List<Language>>() {
                 })

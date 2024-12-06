@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tbank.submissionservice.controller.SubmissionController;
 import ru.tbank.submissionservice.dto.SubmissionRequestBody;
-import ru.tbank.submissionservice.dto.SubmissionResult;
 import ru.tbank.submissionservice.dto.SubmissionToken;
 import ru.tbank.submissionservice.service.SubmissionService;
 

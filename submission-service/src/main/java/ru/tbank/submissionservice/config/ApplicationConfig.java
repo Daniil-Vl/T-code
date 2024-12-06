@@ -1,9 +1,14 @@
 package ru.tbank.submissionservice.config;
 
 
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
-import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -20,7 +25,7 @@ public record ApplicationConfig(
 
         @NotNull
         Scheduling scheduling,
-        
+
         @NotNull
         YandexCloud yandexCloud
 ) {
@@ -43,7 +48,7 @@ public record ApplicationConfig(
             int numberOfThreads
     ) {
     }
-    
+
     public record YandexCloud(
             @NotBlank String accessKeyId,
             @NotBlank String secretAccessKey,

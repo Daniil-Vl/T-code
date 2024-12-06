@@ -22,8 +22,12 @@ public class TestCase {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TestCase testCase)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TestCase testCase)) {
+            return false;
+        }
         return Objects.equals(input, testCase.getInput()) && Objects.equals(output, testCase.getOutput());
     }
 
