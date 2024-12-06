@@ -38,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: contest-service-jar
-          path: contest-service/contest-service-0.0.1-SNAPSHOT.jar
+          path: contest-service/build/libs/contest-service-0.0.1-SNAPSHOT.jar
 
       - id: jacoco
         uses: madrapps/jacoco-report@v1.7.1
