@@ -37,6 +37,9 @@ class YandexCloudS3ServiceImplTest {
 
     @Spy
     private ApplicationConfig applicationConfig = new ApplicationConfig(
+            null,
+            null,
+            null,
             new ApplicationConfig.YandexCloud(
                     ACCESS_KEY_ID,
                     SECRET_ACCESS_KEY,
