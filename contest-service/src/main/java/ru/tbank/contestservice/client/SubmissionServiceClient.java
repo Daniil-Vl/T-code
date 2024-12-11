@@ -2,6 +2,7 @@ package ru.tbank.contestservice.client;
 
 import ru.tbank.contestservice.dto.TestCase;
 import ru.tbank.contestservice.dto.contest.ContestResult;
+import ru.tbank.contestservice.dto.contest.UserRating;
 import ru.tbank.contestservice.dto.submission.SubmissionMessage;
 
 import java.util.List;
@@ -51,4 +52,6 @@ public interface SubmissionServiceClient {
      * @return
      */
     ContestResult getContestResult(long contestId);
+
+    UserRating getUserRating(long contestId);
 }

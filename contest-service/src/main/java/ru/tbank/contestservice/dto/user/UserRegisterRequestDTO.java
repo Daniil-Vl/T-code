@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
-import ru.tbank.contestservice.validation.annotations.PasswordConstraint;
+import ru.tbank.contestservice.utils.validation.annotations.PasswordConstraint;
 
 public record UserRegisterRequestDTO(
         @NotBlank(message = "username cannot be empty")

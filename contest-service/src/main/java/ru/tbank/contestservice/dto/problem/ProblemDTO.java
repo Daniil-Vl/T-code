@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record ProblemDTO(
+        @JsonProperty("problem_id")
+        long problemId,
+
         @NotBlank(message = "title cannot be blank")
         @JsonProperty("title")
         String title,
@@ -22,6 +25,7 @@ public record ProblemDTO(
 ) {
     public static ProblemDTO fromEntity(ProblemEntity problemEntity) {
         return new ProblemDTO(
+                problemEntity.getId(),
                 problemEntity.getTitle(),
                 problemEntity.getDescription(),
                 new ArrayList<>()

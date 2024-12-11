@@ -1,14 +1,14 @@
 package ru.tbank.contestservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record TestCase(
-        @NotBlank
+        @NotNull
         @JsonProperty("input")
         String input,
 
-        @NotBlank
+        @NotNull
         @JsonProperty("output")
         String output
 ) {

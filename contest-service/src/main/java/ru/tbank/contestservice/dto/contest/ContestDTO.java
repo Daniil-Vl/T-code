@@ -8,6 +8,9 @@ import ru.tbank.contestservice.utils.serialization.OffsetDateTimeSerializer;
 import java.time.OffsetDateTime;
 
 public record ContestDTO(
+        @JsonProperty("contest_id")
+        long contestId,
+
         @JsonProperty("title")
         String title,
 
@@ -21,6 +24,7 @@ public record ContestDTO(
 ) {
     public static ContestDTO fromEntity(ContestEntity contest) {
         return new ContestDTO(
+                contest.getId(),
                 contest.getTitle(),
                 contest.getStartDateTime(),
                 contest.getEndDateTime()
