@@ -1,11 +1,11 @@
-package ru.tbank.submissionservice.service.impl;
+package ru.tbank.submissionservice.service.language.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tbank.submissionservice.client.Judge0Client;
-import ru.tbank.submissionservice.enums.Language;
-import ru.tbank.submissionservice.exception.InvalidLanguageException;
-import ru.tbank.submissionservice.service.LanguageService;
+import ru.tbank.submissionservice.dto.language.Language;
+import ru.tbank.submissionservice.exception.language.InvalidLanguageException;
+import ru.tbank.submissionservice.service.language.LanguageService;
 
 import java.util.List;
 
@@ -18,6 +18,11 @@ public class LanguageServiceImpl implements LanguageService {
     @Override
     public List<Language> getLanguages() {
         return client.getLanguages();
+    }
+
+    @Override
+    public List<String> getLanguageNames() {
+        return getLanguages().stream().map(Language::name).toList();
     }
 
     @Override
