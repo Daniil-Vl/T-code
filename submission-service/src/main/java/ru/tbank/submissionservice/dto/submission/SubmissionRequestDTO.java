@@ -1,4 +1,4 @@
-package ru.tbank.submissionservice.dto;
+package ru.tbank.submissionservice.dto.submission;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -10,6 +10,9 @@ public record SubmissionRequestDTO(
         int languageId,
 
         @JsonProperty("stdin")
-        String stdin
+        String stdin,
+
+        @JsonProperty("expected_output")
+        String expectedOutput
 ) {
 }

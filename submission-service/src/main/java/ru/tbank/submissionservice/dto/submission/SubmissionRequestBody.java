@@ -1,9 +1,9 @@
-package ru.tbank.submissionservice.dto;
+package ru.tbank.submissionservice.dto.submission;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import ru.tbank.submissionservice.validation.annotations.LanguageConstraint;
+import ru.tbank.submissionservice.utils.validation.annotations.LanguageConstraint;
 
 public record SubmissionRequestBody(
         @NotBlank
@@ -17,6 +17,10 @@ public record SubmissionRequestBody(
 
         @NotNull
         @JsonProperty(value = "stdin")
-        String stdin
+        String stdin,
+
+        @NotNull
+        @JsonProperty(value = "expected_output")
+        String expectedOutput
 ) {
 }

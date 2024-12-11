@@ -1,5 +1,6 @@
-package ru.tbank.submissionservice.dto;
+package ru.tbank.submissionservice.dto.test_case;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,10 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TestCase {
+    @NotNull
     private String input;
+
+    @NotNull
     private String output;
 
     @Override
