@@ -12,11 +12,11 @@ import ru.tbank.contestservice.dto.error.ApiErrorResponse;
 import ru.tbank.contestservice.exception.CustomException;
 import ru.tbank.contestservice.exception.ForbiddenException;
 import ru.tbank.contestservice.exception.ResourceNotFoundException;
-import ru.tbank.contestservice.exception.contest.ContestTimeException;
 import ru.tbank.contestservice.exception.contest.ContestNotFoundException;
+import ru.tbank.contestservice.exception.contest.ContestTimeException;
 import ru.tbank.contestservice.exception.problem.ProblemNotFoundException;
-import ru.tbank.contestservice.exception.user.UsernameOccupiedException;
 import ru.tbank.contestservice.exception.user.UserNotFoundException;
+import ru.tbank.contestservice.exception.user.UsernameOccupiedException;
 
 import java.time.OffsetDateTime;
 
