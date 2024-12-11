@@ -3,6 +3,7 @@ package ru.tbank.contestservice.config;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.Duration;
 
@@ -12,7 +13,10 @@ public record ApplicationConfig(
         String submissionServiceUrl,
 
         @NotNull
-        Cache cache
+        Cache cache,
+
+        @NotNull
+        RabbitMQ rabbitMq
 ) {
     public record Cache(
             @NotNull
@@ -25,5 +29,13 @@ public record ApplicationConfig(
                 Duration expireAfterWrite
         ) {
         }
+    }
+
+    public record RabbitMQ(
+            @NotBlank String submissionQueueName,
+            @NotBlank String submissionDeadLetterQueueName,
+            @DefaultValue(value = "false") boolean isDurable
+    ) {
+
     }
 }

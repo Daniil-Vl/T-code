@@ -36,6 +36,8 @@ dependencies {
 
     implementation "org.springframework.boot:spring-boot-starter-security"
 
+    implementation 'org.springframework.boot:spring-boot-starter-amqp:3.3.4'
+
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator:3.4.0'
