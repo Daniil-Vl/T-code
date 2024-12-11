@@ -1,11 +1,11 @@
-package ru.tbank.contestservice.validation.validators;
+package ru.tbank.contestservice.utils.validation.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.tbank.contestservice.client.SubmissionServiceClient;
-import ru.tbank.contestservice.validation.annotations.LanguageConstraint;
+import ru.tbank.contestservice.utils.validation.annotations.LanguageConstraint;
 
 @Component
 @RequiredArgsConstructor

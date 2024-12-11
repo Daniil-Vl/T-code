@@ -1,8 +1,8 @@
-package ru.tbank.contestservice.validation.annotations;
+package ru.tbank.contestservice.utils.validation.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import ru.tbank.contestservice.validation.validators.PasswordConstraintValidator;
+import ru.tbank.contestservice.utils.validation.validators.PasswordConstraintValidator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

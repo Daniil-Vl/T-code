@@ -1,8 +1,8 @@
-package ru.tbank.contestservice.validation.validators;
+package ru.tbank.contestservice.utils.validation.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import ru.tbank.contestservice.validation.annotations.PasswordConstraint;
+import ru.tbank.contestservice.utils.validation.annotations.PasswordConstraint;
 
 
 public class PasswordConstraintValidator implements ConstraintValidator<PasswordConstraint, String> {
