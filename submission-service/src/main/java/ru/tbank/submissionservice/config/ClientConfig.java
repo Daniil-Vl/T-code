@@ -19,7 +19,7 @@ public class ClientConfig {
                 .defaultStatusHandler(
                         HttpStatusCode::is5xxServerError,
                         response -> Mono.error(
-                                new ServiceException("External service exception", response.statusCode().value())
+                                new ServiceException("External service exception", HttpStatus.valueOf(response.statusCode().value()))
                         )
                 )
                 .build();
@@ -39,7 +39,7 @@ public class ClientConfig {
                 .onRetryExhaustedThrow(((retryBackoffSpec, retrySignal) -> {
                     throw new ServiceException(
                             "Failed to call external service after max retries",
-                            HttpStatus.SERVICE_UNAVAILABLE.value()
+                            HttpStatus.SERVICE_UNAVAILABLE
                     );
                 }));
     }
