@@ -32,6 +32,22 @@ services:
     networks:
       - backend
 
+  liquibase-contest-db-migrations:
+    image: liquibase/liquibase:4.25
+    depends_on:
+      - contest_db
+    command:
+      - --changelog-file=master.yml
+      - --driver=org.postgresql.Driver
+      - --url=jdbc:postgresql://contest_db:5432/contest_db
+      - --username=postgres
+      - --password=postgres
+      - update
+    volumes:
+      - ./contest-service/src/main/resources/migrations:/liquibase/changelog
+    networks:
+      - backend
+
   liquibase-submission-db-migrations:
     image: liquibase/liquibase:4.25
     depends_on:

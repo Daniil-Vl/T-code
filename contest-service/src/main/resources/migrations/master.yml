@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: changesets/create-users-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changesets/create-contest-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changesets/create-problem-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changesets/create-test-case-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changesets/create-users-contests-table.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changesets/create-contests-problems-table.sql
+      relativeToChangelogFile: true

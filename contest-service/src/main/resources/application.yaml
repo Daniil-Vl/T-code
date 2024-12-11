@@ -5,6 +5,36 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: postgres
-    url: jdbc:postgresql://localhost:5432/contest_db
+    url: jdbc:postgresql://${CONTEST_POSTGRES_HOST}:${CONTEST_POSTGRES_PORT}/contest_db
+  jpa:
+    show-sql: true
+  devtools:
+    restart:
+      enabled: true
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
 server:
   port: 8080
+  error:
+    include-stacktrace: never
+    include-path: never
+    include-binding-errors: never
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+
+app:
+  submission-service-url: ${SUBMISSION_SERVICE_BASE_URL}
+  cache:
+    language:
+      cache-name: language-cache
+      expire-after-write: 1h
+  rabbit-mq:
+    submission-queue-name: ${SUBMISSION_QUEUE_NAME}
+    submission-dead-letter-queue-name: ${SUBMISSION_DEAD_LETTER_QUEUE_NAME}
+    is-durable: false
