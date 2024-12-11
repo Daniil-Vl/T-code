@@ -1,15 +1,21 @@
 package ru.tbank.submissionservice.exception;
 
-import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Getter
-public class ServiceException extends RuntimeException {
+@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+public class ServiceException extends CustomException {
 
-    private final int statusCode;
+    private final HttpStatus httpStatus;
 
-    public ServiceException(String message, int statusCode) {
+    public ServiceException(String message, HttpStatus httpStatus) {
         super(message);
-        this.statusCode = statusCode;
+        this.httpStatus = httpStatus;
+    }
+
+    @Override
+    public HttpStatus getStatusCode() {
+        return httpStatus;
     }
 
 }
