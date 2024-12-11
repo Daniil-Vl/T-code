@@ -12,8 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.tbank.contestservice.dao.jpa.UserRepository;
 import ru.tbank.contestservice.dto.user.UserDTO;
-import ru.tbank.contestservice.exception.user.UsernameOccupiedException;
 import ru.tbank.contestservice.exception.user.UserNotFoundException;
+import ru.tbank.contestservice.exception.user.UsernameOccupiedException;
 import ru.tbank.contestservice.model.entities.UserEntity;
 import ru.tbank.contestservice.service.UserService;
 
