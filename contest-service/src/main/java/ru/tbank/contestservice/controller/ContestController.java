@@ -21,6 +21,7 @@ import ru.tbank.contestservice.dto.contest.AddProblemContestRequest;
 import ru.tbank.contestservice.dto.contest.ContestDTO;
 import ru.tbank.contestservice.dto.contest.ContestResult;
 import ru.tbank.contestservice.dto.contest.CreateContestRequest;
+import ru.tbank.contestservice.dto.contest.UserRating;
 import ru.tbank.contestservice.dto.error.ApiErrorResponse;
 import ru.tbank.contestservice.dto.problem.ProblemDTO;
 
@@ -103,6 +104,31 @@ public interface ContestController {
     @GetMapping("/{contest_id}/results")
     ContestResult getContestResult(
             @PathVariable(name = "contest_id") @Positive(message = "contest id must be positive") long contestId
+    );
+
+    @Operation(summary = "Get rating of all contest`s participants")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Rating successfully retrieved"),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid contest id",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ApiErrorResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Contest not found",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ApiErrorResponse.class)
+                    )
+            )
+    })
+    @GetMapping("/{contest_id}/rating")
+    UserRating getUserRating(
+            @PathVariable("contest_id") @Positive(message = "contest id must be positive") long contestId
     );
 
     @Operation(summary = "Create contest")

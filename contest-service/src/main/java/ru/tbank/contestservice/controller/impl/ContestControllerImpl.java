@@ -8,6 +8,7 @@ import ru.tbank.contestservice.dto.contest.AddProblemContestRequest;
 import ru.tbank.contestservice.dto.contest.ContestDTO;
 import ru.tbank.contestservice.dto.contest.ContestResult;
 import ru.tbank.contestservice.dto.contest.CreateContestRequest;
+import ru.tbank.contestservice.dto.contest.UserRating;
 import ru.tbank.contestservice.dto.problem.ProblemDTO;
 import ru.tbank.contestservice.service.ContestService;
 
@@ -33,6 +34,11 @@ public class ContestControllerImpl implements ContestController {
     @Override
     public ContestResult getContestResult(long contestId) {
         return contestService.getContestResults(contestId);
+    }
+
+    @Override
+    public UserRating getUserRating(long contestId) {
+        return contestService.getUserRating(contestId);
     }
 
     @Override
