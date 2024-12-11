@@ -4,9 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.tbank.submissionservice.dto.ApiErrorResponse;
-import ru.tbank.submissionservice.exception.InvalidTestCasesException;
+import ru.tbank.submissionservice.dto.error.ApiErrorResponse;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
+
+import java.time.OffsetDateTime;
 
 @RestControllerAdvice
 public class S3ExceptionHandler {
@@ -15,26 +16,10 @@ public class S3ExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiErrorResponse handleNoSuchKeyException(NoSuchKeyException e) {
         return new ApiErrorResponse(
+                OffsetDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.toString(),
                 "Object with given id do not found"
-        );
-    }
-
-    @ExceptionHandler(InvalidTestCasesException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiErrorResponse handleInvalidTestCasesException(InvalidTestCasesException e) {
-        return new ApiErrorResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                e.getMessage()
-        );
-    }
-
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiErrorResponse handleException(Exception e) {
-        return new ApiErrorResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                e.getMessage()
         );
     }
 
