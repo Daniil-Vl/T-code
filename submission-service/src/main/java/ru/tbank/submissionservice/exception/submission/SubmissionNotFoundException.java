@@ -1,4 +1,4 @@
-package ru.tbank.submissionservice.exception;
+package ru.tbank.submissionservice.exception.submission;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
