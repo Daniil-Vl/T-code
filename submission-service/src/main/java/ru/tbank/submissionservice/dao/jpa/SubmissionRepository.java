@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import ru.tbank.submissionservice.model.entities.SubmissionEntity;
 import ru.tbank.submissionservice.model.entities.id.SubmissionId;
 
+import java.util.List;
+
 @Repository
 public interface SubmissionRepository extends JpaRepository<SubmissionEntity, SubmissionId>, JpaSpecificationExecutor<SubmissionEntity> {
 
@@ -22,7 +24,7 @@ public interface SubmissionRepository extends JpaRepository<SubmissionEntity, Su
                         memory_used_kb = :memory_used_kb
                     WHERE user_id = :user_id
                           AND contest_id = :contest_id
-                          AND problem_id = :problem_idD
+                          AND problem_id = :problem_id
                     """,
             nativeQuery = true
     )
@@ -35,5 +37,7 @@ public interface SubmissionRepository extends JpaRepository<SubmissionEntity, Su
             @Param("execution_time_ms") int executionTime,
             @Param("memory_used_kb") int memoryUsedKb
     );
+
+    List<SubmissionEntity> getAllByContestId(long contestId);
 
 }
