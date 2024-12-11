@@ -1,12 +1,13 @@
 package ru.tbank.contestservice.integration.problem;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -23,7 +24,6 @@ import ru.tbank.contestservice.service.ProblemService;
 import ru.tbank.contestservice.service.UserService;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProblemIntegrationTest extends AbstractIntegrationTest {
 
     private static final String BASE_URL = "/api/v1/problem";
+    private static final String TEST_CASE_PATH = "/api/v1/test-case/problem";
 
     @Autowired
     private ProblemRepository problemRepository;
@@ -48,7 +49,7 @@ public class ProblemIntegrationTest extends AbstractIntegrationTest {
     @SpyBean
     private TestCaseRepository testCaseRepository;
 
-    @MockBean
+    @Autowired
     private SubmissionServiceClient submissionServiceClient;
 
     @Autowired
@@ -68,12 +69,14 @@ public class ProblemIntegrationTest extends AbstractIntegrationTest {
         String password = "password";
         newUser(username, password);
         String authHeaderValue = setAuth(username, password);
-        ProblemDTO problemDTO = new ProblemDTO("title", "description", List.of(new TestCase("input", "output")));
+        ProblemDTO problemDTO = new ProblemDTO(1, "title", "description", List.of(new TestCase("input", "output")));
         String requestBody = objectMapper.writeValueAsString(problemDTO);
-        Mockito.when(
-                submissionServiceClient.saveTestCases(Mockito.anyLong(), Mockito.anyList())
-        ).thenReturn(
-                CompletableFuture.completedFuture(null)
+        WireMock.stubFor(
+                WireMock.post(WireMock.urlPathMatching(TEST_CASE_PATH + "/\\d+"))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(200)
+                        )
         );
 
         // Act
@@ -103,8 +106,15 @@ public class ProblemIntegrationTest extends AbstractIntegrationTest {
         String password = "password";
         newUser(username, password);
         String authHeaderValue = setAuth(username, password);
-        ProblemDTO problemDTO = new ProblemDTO("", "description", List.of(new TestCase("input", "output")));
+        ProblemDTO problemDTO = new ProblemDTO(1, "", "description", List.of(new TestCase("input", "output")));
         String requestBody = objectMapper.writeValueAsString(problemDTO);
+        WireMock.stubFor(
+                WireMock.post(WireMock.urlPathMatching(TEST_CASE_PATH + "/\\d+"))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(200)
+                        )
+        );
 
         // Act
         mockMvc.perform(
@@ -124,7 +134,7 @@ public class ProblemIntegrationTest extends AbstractIntegrationTest {
     @Test
     void givenUnauthenticatedUser_whenCreateProblem_thenReturnUnauthorized() throws Exception {
         // Assign
-        ProblemDTO problemDTO = new ProblemDTO("title", "description", List.of(new TestCase("input", "output")));
+        ProblemDTO problemDTO = new ProblemDTO(1, "title", "description", List.of(new TestCase("input", "output")));
         String requestBody = objectMapper.writeValueAsString(problemDTO);
 
         // Act
@@ -154,6 +164,15 @@ public class ProblemIntegrationTest extends AbstractIntegrationTest {
                 .owner(user)
                 .build();
         problem = problemRepository.save(problem);
+        WireMock.stubFor(
+                WireMock.get(WireMock.urlPathMatching(TEST_CASE_PATH + "/\\d+"))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(200)
+                                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                                        .withBody("[]")
+                        )
+        );
 
         // Act
         MvcResult mvcResult = mockMvc.perform(
@@ -502,10 +521,12 @@ public class ProblemIntegrationTest extends AbstractIntegrationTest {
         problemRepository.save(problem);
         List<TestCase> testCases = List.of(new TestCase("input", "output"));
         String requestBody = objectMapper.writeValueAsString(testCases);
-        Mockito.when(
-                submissionServiceClient.updateTestCases(problem.getId(), testCases)
-        ).thenReturn(
-                CompletableFuture.completedFuture(null)
+        WireMock.stubFor(
+                WireMock.post(WireMock.urlPathMatching(TEST_CASE_PATH + "/\\d+"))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(200)
+                        )
         );
 
         // Act
@@ -519,7 +540,6 @@ public class ProblemIntegrationTest extends AbstractIntegrationTest {
                 .andExpect(status().isOk());
 
         // Assert
-        Mockito.verify(submissionServiceClient).updateTestCases(problem.getId(), testCases);
         Mockito.verify(testCaseRepository).removeAllByProblem(problem);
     }
 
