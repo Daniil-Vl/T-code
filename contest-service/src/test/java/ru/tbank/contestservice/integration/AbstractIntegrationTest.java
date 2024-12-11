@@ -6,7 +6,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -17,11 +16,9 @@ import ru.tbank.contestservice.dao.jpa.ContestRepository;
 import ru.tbank.contestservice.dao.jpa.ProblemRepository;
 import ru.tbank.contestservice.dao.jpa.TestCaseRepository;
 import ru.tbank.contestservice.dao.jpa.UserRepository;
-import ru.tbank.contestservice.dto.error.ApiErrorResponse;
 import ru.tbank.contestservice.model.entities.UserEntity;
 
 import java.nio.charset.StandardCharsets;
-import java.time.OffsetDateTime;
 import java.util.Base64;
 
 @Testcontainers
@@ -71,21 +68,20 @@ public class AbstractIntegrationTest {
         registry.add("spring.liquibase.change-log", () -> "classpath:migrations/master.yml");
     }
 
+    @DynamicPropertySource
+    static void rabbitMQProperties(DynamicPropertyRegistry registry) {
+        registry.add("app.rabbit-mq.submission-queue-name", () -> "test-submission-queue");
+        registry.add("app.rabbit-mq.submission-dead-letter-queue-name", () -> "test-submission-dead-letter-queue");
+        registry.add("app.rabbit-mq.is-durable", () -> "false");
+
+    }
+
     @AfterEach
     void clearDatabase() {
         testCaseRepository.deleteAll();
         problemRepository.deleteAll();
         contestRepository.deleteAll();
         userRepository.deleteAll();
-    }
-
-    protected ApiErrorResponse buildErrorResponse(String message, HttpStatus status) {
-        return new ApiErrorResponse(
-                OffsetDateTime.now(),
-                status.value(),
-                status.toString(),
-                message
-        );
     }
 
     protected UserEntity newUser(String username, String password) {
