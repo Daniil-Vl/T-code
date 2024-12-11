@@ -35,9 +35,14 @@ public class SubmissionEntity {
     @Column(name = "problem_id", nullable = false)
     private long problemId;
 
-    @Column(name = "code_key", nullable = false)
+    @Setter
+    @Column(name = "code_key")
     private String codeKey;
 
+    @Column(name = "language", nullable = false)
+    private String language;
+
+    @Setter
     @Column(name = "submitted_at", nullable = false)
     private OffsetDateTime submittedAt;
 

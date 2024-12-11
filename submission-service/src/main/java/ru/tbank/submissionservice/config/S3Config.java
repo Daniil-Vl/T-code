@@ -20,8 +20,12 @@ public class S3Config {
         );
 
         return S3Client.builder()
-                .endpointOverride(URI.create("https://storage.yandexcloud.net"))
-                .region(Region.of("ru-central1"))
+                .endpointOverride(
+                        URI.create(applicationConfig.yandexCloud().endpoint())
+                )
+                .region(
+                        Region.of(applicationConfig.yandexCloud().region())
+                )
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
                 .build();
     }

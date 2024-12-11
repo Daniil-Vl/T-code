@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
@@ -27,7 +28,10 @@ public record ApplicationConfig(
         Scheduling scheduling,
 
         @NotNull
-        YandexCloud yandexCloud
+        YandexCloud yandexCloud,
+
+        @NotNull
+        RabbitMQ rabbitMq
 ) {
     public record Retry(
             @NotNull
@@ -53,7 +57,17 @@ public record ApplicationConfig(
             @NotBlank String accessKeyId,
             @NotBlank String secretAccessKey,
             @NotBlank String submissionSourceCodeBucketName,
-            @NotBlank String testArchiveBucketName
+            @NotBlank String testArchiveBucketName,
+            @NotBlank String endpoint,
+            @NotBlank String region
     ) {
     }
+
+    public record RabbitMQ(
+            @NotBlank String submissionQueueName,
+            @NotBlank String submissionDeadLetterQueueName,
+            @DefaultValue(value = "false") boolean isDurable
+    ) {
+    }
+
 }
