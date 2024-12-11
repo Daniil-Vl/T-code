@@ -1,11 +1,11 @@
-package ru.tbank.submissionservice.validation.validators;
+package ru.tbank.submissionservice.utils.validation.validators;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.tbank.submissionservice.service.LanguageService;
-import ru.tbank.submissionservice.validation.annotations.LanguageConstraint;
+import ru.tbank.submissionservice.service.language.LanguageService;
+import ru.tbank.submissionservice.utils.validation.annotations.LanguageConstraint;
 
 @Component
 @RequiredArgsConstructor

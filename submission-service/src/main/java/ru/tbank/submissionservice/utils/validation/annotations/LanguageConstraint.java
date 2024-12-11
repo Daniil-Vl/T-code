@@ -1,8 +1,8 @@
-package ru.tbank.submissionservice.validation.annotations;
+package ru.tbank.submissionservice.utils.validation.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
-import ru.tbank.submissionservice.validation.validators.LanguageValidator;
+import ru.tbank.submissionservice.utils.validation.validators.LanguageValidator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
