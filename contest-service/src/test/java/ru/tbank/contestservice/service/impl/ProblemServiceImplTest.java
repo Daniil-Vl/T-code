@@ -46,7 +46,7 @@ class ProblemServiceImplTest {
     void givenProblemDTOWithoutTests_whenCreateProblem_thenSaveProblemAndDoNotSaveTests() {
         // Assign
         UserEntity user = new UserEntity();
-        ProblemDTO problemDTO = new ProblemDTO("title", "description", List.of());
+        ProblemDTO problemDTO = new ProblemDTO(1, "title", "description", List.of());
         Mockito.when(userService.getAuthenticatedUser()).thenReturn(user);
 
         // Act
@@ -71,7 +71,7 @@ class ProblemServiceImplTest {
     void givenProblemDTOWithTests_whenCreateProblem_thenSaveProblemAndDoSaveTests() {
         // Assign
         UserEntity user = new UserEntity();
-        ProblemDTO problemDTO = new ProblemDTO("title", "description", List.of(new TestCase("input", "output")));
+        ProblemDTO problemDTO = new ProblemDTO(1, "title", "description", List.of(new TestCase("input", "output")));
         Mockito.when(
                 userService.getAuthenticatedUser()
         ).thenReturn(

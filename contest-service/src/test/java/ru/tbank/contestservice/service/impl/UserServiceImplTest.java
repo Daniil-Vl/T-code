@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.tbank.contestservice.dao.jpa.UserRepository;
 import ru.tbank.contestservice.dto.user.UserDTO;
-import ru.tbank.contestservice.exception.user.UsernameOccupiedException;
 import ru.tbank.contestservice.exception.user.UserNotFoundException;
+import ru.tbank.contestservice.exception.user.UsernameOccupiedException;
 import ru.tbank.contestservice.model.entities.UserEntity;
 
 import java.util.Optional;
