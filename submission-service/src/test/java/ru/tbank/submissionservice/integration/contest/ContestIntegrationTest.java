@@ -89,6 +89,8 @@ public class ContestIntegrationTest extends AbstractIntegrationTest {
         );
 
         // Assert
+        System.out.println("Expected contest result: " + expectedContestResult);
+        System.out.println("Actual contest result: " + actualContestResult);
         Assertions.assertEquals(expectedContestResult, actualContestResult);
     }
 
