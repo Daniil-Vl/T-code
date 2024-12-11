@@ -15,6 +15,7 @@ import ru.tbank.submissionservice.integration.AbstractIntegrationTest;
 import ru.tbank.submissionservice.model.entities.SubmissionEntity;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ContestIntegrationTest extends AbstractIntegrationTest {
 
     private static final String BASE_URL = "/api/v1";
+    private static final ZoneOffset DEFAULT_ZONE_OFFSET = ZoneOffset.ofHours(3);
 
     @Autowired
     private MockMvc mockMvc;
@@ -48,7 +50,7 @@ public class ContestIntegrationTest extends AbstractIntegrationTest {
                 .userId(firstUserId)
                 .problemId(problemId)
                 .status(SubmissionStatus.WRONG_ANSWER.getValue())
-                .submittedAt(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .submittedAt(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS).withOffsetSameInstant(DEFAULT_ZONE_OFFSET))
                 .score(8)
                 .executionTimeMs(10)
                 .memoryUsedKb(10)
@@ -58,7 +60,7 @@ public class ContestIntegrationTest extends AbstractIntegrationTest {
                 .contestId(contestId)
                 .userId(secondUserId)
                 .problemId(problemId)
-                .submittedAt(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS))
+                .submittedAt(OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS).withOffsetSameInstant(DEFAULT_ZONE_OFFSET))
                 .status(SubmissionStatus.ACCEPTED.getValue())
                 .score(10)
                 .executionTimeMs(15)
