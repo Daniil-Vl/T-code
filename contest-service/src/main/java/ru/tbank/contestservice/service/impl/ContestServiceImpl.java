@@ -10,12 +10,13 @@ import ru.tbank.contestservice.dao.jpa.ProblemRepository;
 import ru.tbank.contestservice.dto.contest.ContestDTO;
 import ru.tbank.contestservice.dto.contest.ContestResult;
 import ru.tbank.contestservice.dto.contest.CreateContestRequest;
+import ru.tbank.contestservice.dto.contest.UserRating;
 import ru.tbank.contestservice.dto.problem.ProblemDTO;
 import ru.tbank.contestservice.dto.submission.SubmissionMessage;
 import ru.tbank.contestservice.dto.submission.SubmissionRequest;
 import ru.tbank.contestservice.exception.ForbiddenException;
-import ru.tbank.contestservice.exception.contest.ContestTimeException;
 import ru.tbank.contestservice.exception.contest.ContestNotFoundException;
+import ru.tbank.contestservice.exception.contest.ContestTimeException;
 import ru.tbank.contestservice.exception.problem.ProblemNotFoundException;
 import ru.tbank.contestservice.model.entities.ContestEntity;
 import ru.tbank.contestservice.model.entities.ProblemEntity;
@@ -101,13 +102,22 @@ public class ContestServiceImpl implements ContestService {
 
     @Override
     public ContestResult getContestResults(long contestId) {
+        checkContestExistence(contestId);
+        return submissionServiceClient.getContestResult(contestId);
+    }
+
+    @Override
+    public UserRating getUserRating(long contestId) {
+        checkContestExistence(contestId);
+        return submissionServiceClient.getUserRating(contestId);
+    }
+
+    private void checkContestExistence(long contestId) {
         if (!contestRepository.existsById(contestId)) {
             throw new ContestNotFoundException(
                     String.format("Contest %d not found", contestId)
             );
         }
-
-        return submissionServiceClient.getContestResult(contestId);
     }
 
     @Override

@@ -3,6 +3,7 @@ package ru.tbank.contestservice.service;
 import ru.tbank.contestservice.dto.contest.ContestDTO;
 import ru.tbank.contestservice.dto.contest.ContestResult;
 import ru.tbank.contestservice.dto.contest.CreateContestRequest;
+import ru.tbank.contestservice.dto.contest.UserRating;
 import ru.tbank.contestservice.dto.problem.ProblemDTO;
 import ru.tbank.contestservice.dto.submission.SubmissionRequest;
 import ru.tbank.contestservice.model.entities.ContestEntity;
@@ -31,6 +32,8 @@ public interface ContestService {
      * @return
      */
     ContestResult getContestResults(long contestId);
+
+    UserRating getUserRating(long contestId);
 
     /**
      * Submit user`s code for testing in submission service
