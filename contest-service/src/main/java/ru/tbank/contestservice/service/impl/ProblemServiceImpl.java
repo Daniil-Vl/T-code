@@ -19,7 +19,6 @@ import ru.tbank.contestservice.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +44,7 @@ public class ProblemServiceImpl implements ProblemService {
 
         if (problemDTO.testCases() != null && !problemDTO.testCases().isEmpty()) {
             // Send test cases to submission-service, where them will be saved to S3
-            CompletableFuture<Void> savingTestCasesFuture = submissionServiceClient
+            var savingTestCasesFuture = submissionServiceClient
                     .saveTestCases(problemEntity.getId(), problemDTO.testCases());
 
             // Save test cases info into db
@@ -60,7 +59,7 @@ public class ProblemServiceImpl implements ProblemService {
     public ProblemDTO getProblemDescription(long problemId) {
         ProblemEntity problemEntity = getProblemEntity(problemId);
         return new ProblemDTO(
-                problemEntity.getTitle(), problemEntity.getDescription(), List.of()
+                problemId, problemEntity.getTitle(), problemEntity.getDescription(), List.of()
         );
     }
 
@@ -69,7 +68,7 @@ public class ProblemServiceImpl implements ProblemService {
         ProblemEntity problemEntity = getProblemIfHasAccess(problemId);
         List<TestCase> testCases = submissionServiceClient.getTestCases(problemId);
         return new ProblemDTO(
-                problemEntity.getTitle(), problemEntity.getDescription(), testCases
+                problemId, problemEntity.getTitle(), problemEntity.getDescription(), testCases
         );
     }
 
@@ -84,7 +83,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     @Transactional
     public void updateProblemTestCases(long problemId, List<TestCase> testCases) {
-        CompletableFuture<Void> updateFuture = submissionServiceClient.updateTestCases(problemId, testCases);
+        var updateFuture = submissionServiceClient.updateTestCases(problemId, testCases);
 
         ProblemEntity problemEntity = getProblemIfHasAccess(problemId);
         testCaseRepository.removeAllByProblem(problemEntity);
