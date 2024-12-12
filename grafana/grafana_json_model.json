@@ -127,7 +127,7 @@
           "refId": "A"
         }
       ],
-      "title": "Panel Title",
+      "title": "CPU usage (%)",
       "type": "gauge"
     },
     {
@@ -734,7 +734,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "10s",
+  "refresh": "5s",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -770,13 +770,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "T-Code",
   "uid": "ee6mroknrf280d",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
