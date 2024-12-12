@@ -36,7 +36,9 @@ T-Code - приложение для решения алгоритмически
 4. Доля запросов с http кодами 4xx и 5xx.
 5. Среднее время обработки запроса
 
-Конфигурация дашборда (json model) хранится в директории grafana.
+Конфигурация дашборда (json model) хранится в директории grafana. 
+С помощью данной конфигурации можно [импортировать](https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/import-dashboards/) данный дашборд.
+В качестве адреса prometheus data source нужно будет указать `http://prometheus:9090`
 
 #### Дашборд
 
