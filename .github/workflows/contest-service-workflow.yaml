@@ -1,6 +1,7 @@
 name: Contest Service Build
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - .github/workflows/contest-service-workflow.yaml

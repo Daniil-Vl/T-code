@@ -6,6 +6,27 @@ x-logging:
       max-size: 100M
 
 services:
+  contest-service:
+    image: ghcr.io/daniil-vl/contest-service:latest
+    container_name: contest-service
+    env_file: ".env"
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+      - elk
+
+  submission-service:
+    image: ghcr.io/daniil-vl/submission-service:latest
+    container_name: submission-service
+    env_file: ".env"
+    ports:
+      - "8090:8090"
+    networks:
+      - backend
+      - elk
+      - judge0
+
   contest_db:
     image: postgres:16
     ports:
