@@ -1,0 +1,940 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /api/v1/problem/{problem_id}/test_cases:
+    put:
+      tags:
+      - ProblemController
+      summary: Update problem`s test cases
+      operationId: updateProblemTestCases
+      parameters:
+      - name: problem_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/TestCase"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: User not problem owner
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid problem data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Problem not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Problem`s test cases successfully updated
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+      security:
+      - basicAuth: []
+  /api/v1/contest/problem:
+    put:
+      tags:
+      - ContestController
+      summary: Add problem to contest
+      operationId: addProblem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddProblemContestRequest"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: User not contest`s owner
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Problem not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Problem successfully added
+      security:
+      - basicAuth: []
+  /api/v1/users:
+    post:
+      tags:
+      - UserController
+      summary: Register user
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegisterRequestDTO"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid user data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "201":
+          description: User successfully registered
+    patch:
+      tags:
+      - UserController
+      summary: Update user
+      operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDTO"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: User not updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: User successfully updated
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+      security:
+      - basicAuth: []
+  /api/v1/submission/contest/{contest_id}/problem/{problem_id}/submit:
+    post:
+      tags:
+      - SubmissionController
+      summary: Submit solution
+      operationId: submit
+      parameters:
+      - name: contest_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: problem_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmissionRequest"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: User not registered for contest
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Contest already finished
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Problem not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "401":
+          description: User not authorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Solution successfully submitted
+      security:
+      - basicAuth: []
+  /api/v1/problem:
+    post:
+      tags:
+      - ProblemController
+      summary: Create problem
+      operationId: createProblem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProblemDTO"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid problem data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "201":
+          description: Problem successfully created
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+      security:
+      - basicAuth: []
+  /api/v1/contest:
+    post:
+      tags:
+      - ContestController
+      summary: Create contest
+      operationId: createContest
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateContestRequest"
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Problem not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "201":
+          description: Contest successfully created
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+      security:
+      - basicAuth: []
+  /api/v1/contest/{contest_id}/register:
+    post:
+      tags:
+      - ContestController
+      summary: Register for contest
+      operationId: registerForContest
+      parameters:
+      - name: contest_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Registration already finished
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Contest not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: User successfully registered
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+      security:
+      - basicAuth: []
+  /api/v1/problem/{problem_id}/description:
+    get:
+      tags:
+      - ProblemController
+      summary: Get problem description
+      operationId: getProblemDescriptionById
+      parameters:
+      - name: problem_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Not positive problem id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Problem not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Problem successfully retrieved
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDTO"
+    patch:
+      tags:
+      - ProblemController
+      summary: Update problem description
+      operationId: updateProblemDescription
+      parameters:
+      - name: problem_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: User not problem owner
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid problem data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Problem not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Problem successfully updated
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+      security:
+      - basicAuth: []
+  /api/v1/submission/language:
+    get:
+      tags:
+      - SubmissionController
+      summary: Get available languages
+      operationId: getAvailableLanguages
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Languages successfully retrieved
+          content:
+            '*/*':
+              schema:
+                uniqueItems: true
+                type: array
+                items:
+                  type: string
+  /api/v1/problem/{problem_id}:
+    get:
+      tags:
+      - ProblemController
+      summary: Get problem (with test cases)
+      operationId: getProblemById
+      parameters:
+      - name: problem_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: User not problem owner
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Not positive problem id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Problem not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Problem successfully retrieved
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ProblemDTO"
+        "401":
+          description: Unauthenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+      security:
+      - basicAuth: []
+  /api/v1/contest/{contest_id}:
+    get:
+      tags:
+      - ContestController
+      summary: Get contest info
+      operationId: getContestInfo
+      parameters:
+      - name: contest_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid contest id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Contest not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Contest info successfully retrieved
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContestDTO"
+  /api/v1/contest/{contest_id}/results:
+    get:
+      tags:
+      - ContestController
+      summary: Get contest results
+      operationId: getContestResult
+      parameters:
+      - name: contest_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid contest id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Contest not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Results successfully retrieved
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContestResult"
+  /api/v1/contest/{contest_id}/rating:
+    get:
+      tags:
+      - ContestController
+      summary: Get rating of all contest`s participants
+      operationId: getUserRating
+      parameters:
+      - name: contest_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid contest id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Contest not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Rating successfully retrieved
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserRating"
+  /api/v1/contest/{contest_id}/problems:
+    get:
+      tags:
+      - ContestController
+      summary: Get contest problems
+      operationId: getProblems
+      parameters:
+      - name: contest_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "400":
+          description: Invalid contest id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Contest not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Contest problems successfully retrieved
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProblemDTO"
+components:
+  schemas:
+    ApiErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          format: int32
+        error:
+          type: string
+        message:
+          type: string
+    TestCase:
+      required:
+      - input
+      - output
+      type: object
+      properties:
+        input:
+          type: string
+        output:
+          type: string
+    AddProblemContestRequest:
+      type: object
+      properties:
+        contest_id:
+          type: integer
+          format: int64
+        problem_id:
+          type: integer
+          format: int64
+    UserRegisterRequestDTO:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    SubmissionRequest:
+      required:
+      - language
+      - source_code
+      type: object
+      properties:
+        source_code:
+          type: string
+        language:
+          type: string
+    ProblemDTO:
+      required:
+      - description
+      - title
+      type: object
+      properties:
+        problem_id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+        test_cases:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestCase"
+    CreateContestRequest:
+      required:
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+        problem_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+    UserDTO:
+      required:
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+    ContestDTO:
+      type: object
+      properties:
+        contest_id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        start_time:
+          type: string
+          format: date-time
+        end_time:
+          type: string
+          format: date-time
+    ContestResult:
+      type: object
+      properties:
+        contest_id:
+          type: integer
+          format: int64
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProblemResult"
+    ProblemResult:
+      type: object
+      properties:
+        problem_id:
+          type: integer
+          format: int64
+        user_id:
+          type: integer
+          format: int64
+        status:
+          type: string
+        language:
+          type: string
+        submitted_at:
+          type: string
+          format: date-time
+        score:
+          type: integer
+          format: int64
+        execution_time_ms:
+          type: integer
+          format: int64
+        memory_used_kb:
+          type: integer
+          format: int64
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        solved_problem_number:
+          type: integer
+          format: int32
+        total_score:
+          type: integer
+          format: int32
+    UserRating:
+      type: object
+      properties:
+        contest_id:
+          type: integer
+          format: int64
+        rating:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
