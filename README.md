@@ -9,15 +9,17 @@ T-Code - приложение для решения алгоритмически
 
 1. Java 21
 2. Spring boot 3
-3. PostgreSQL 16
+3. Postgres 16
 4. Liquibase 4.25
 5. RabbitMQ 4.0
-6. Yandex Cloud Object Storage (S3)
-7. [Judge0](https://github.com/judge0/judge0)
-8. Prometheus
-9. Grafana
-10. Docker
-11. GitHub Actions
+6. Prometheus
+7. Grafana 
+8. Docker 
+9. GitHub Actions
+
+## Интеграции 
+1. [Yandex Cloud Object Storage (S3)](https://yandex.cloud/ru/services/storage)
+2. [Judge0](https://github.com/judge0/judge0)
 
 ## Архитектура проекта
 
