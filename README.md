@@ -13,17 +13,18 @@ T-Code - приложение для решения алгоритмически
 4. Liquibase 4.25
 5. RabbitMQ 4.0
 6. Prometheus
-7. Grafana 
-8. Docker 
+7. Grafana
+8. Docker
 9. GitHub Actions
 
-## Интеграции 
+## Интеграции
+
 1. [Yandex Cloud Object Storage (S3)](https://yandex.cloud/ru/services/storage)
 2. [Judge0](https://github.com/judge0/judge0)
 
 ## Архитектура проекта
 
-## Observability
+## Метрики
 
 В проект добавление Prometheus для сбора метрик и Grafana для их визуализации.
 
@@ -38,8 +39,18 @@ T-Code - приложение для решения алгоритмически
 Конфигурация дашборда (json model) хранится в директории grafana.
 
 #### Дашборд
+
 ![Grafana dashboard first](assets/grafana-dashboard-1.png)
 ![Grafana dashboard second](assets/grafana-dashboard-2.png)
+
+## Логи
+
+Для сбора логов добавлена конфигурация для поднятия elk стэка в docker compose.
+Каждый сервис пишет логи в отдельный index (contest-service или submission-service),
+что позволяет просматривать логи каждого сервиса по отдельности.
+
+#### Kibana dashboard
+![kibana dashboard](assets/kibana.png)
 
 ## Тестирование
 
