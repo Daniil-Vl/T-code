@@ -22,6 +22,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/error/**").permitAll()
+                        .requestMatchers("/actuator/prometheus").permitAll()
                         .requestMatchers("/api/v1/submission/language").permitAll()
                         .requestMatchers("/swagger-ui/**", "/api-docs*/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users").permitAll()

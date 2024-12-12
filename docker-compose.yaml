@@ -134,6 +134,24 @@ services:
     networks:
       - judge0
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana-oss
+    ports:
+      - "3000:3000"
+
   elasticsearch:
     image: elasticsearch:7.9.1
     container_name: elasticsearch
@@ -183,11 +201,13 @@ services:
     depends_on:
       - elasticsearch
 
+
 volumes:
   contest_postgresql: { }
   submission_postgresql: { }
   judge0-data: { }
   rabbitmq: { }
+  prometheus-data: { }
   elasticsearch-data: { }
   logstash-data: { }
   kibana-data: { }

@@ -28,6 +28,15 @@ springdoc:
     enabled: true
     path: /api-docs
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
 app:
   submission-service-url: ${SUBMISSION_SERVICE_BASE_URL}
   cache:

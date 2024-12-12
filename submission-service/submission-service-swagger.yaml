@@ -1,0 +1,250 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8090
+  description: Generated server url
+paths:
+  /api/v1/test-case/problem/{problem_id}:
+    get:
+      tags:
+      - TestCaseController
+      summary: Get problem`s test cases
+      operationId: getTestCases
+      parameters:
+      - name: problem_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "400":
+          description: Not positive problem id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Problem not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Test cases successfully retrieved
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TestCase"
+    post:
+      tags:
+      - TestCaseController
+      summary: Save tests cases for given problem in object storage
+      operationId: saveTestCases
+      parameters:
+      - name: problem_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/TestCase"
+        required: true
+      responses:
+        "400":
+          description: Not positive problem id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Test cases successfully saved
+  /api/v1/languages:
+    get:
+      tags:
+      - LanguageController
+      summary: Get available languages
+      operationId: getLanguages
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Languages successfully retrieved
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  type: string
+  /api/v1/contest/{contest_id}/result:
+    get:
+      tags:
+      - ContestController
+      summary: Get contest results
+      operationId: getContestResult
+      parameters:
+      - name: contest_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "400":
+          description: Not positive contest id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Contest result successfully retrieved
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ContestResult"
+  /api/v1/contest/{contest_id}/rating:
+    get:
+      tags:
+      - ContestController
+      summary: Get user`s rating
+      operationId: getUserRating
+      parameters:
+      - name: contest_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "400":
+          description: Not positive contest id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "404":
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+        "200":
+          description: Rating successfully retrieved
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserRating"
+components:
+  schemas:
+    ApiErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          format: int32
+        error:
+          type: string
+        message:
+          type: string
+    TestCase:
+      required:
+      - input
+      - output
+      type: object
+      properties:
+        input:
+          type: string
+        output:
+          type: string
+    ContestResult:
+      type: object
+      properties:
+        contest_id:
+          type: integer
+          format: int64
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProblemResult"
+    ProblemResult:
+      type: object
+      properties:
+        problem_id:
+          type: integer
+          format: int64
+        user_id:
+          type: integer
+          format: int64
+        status:
+          type: string
+        language:
+          type: string
+        submitted_at:
+          type: string
+          format: date-time
+        score:
+          type: integer
+          format: int64
+        execution_time_ms:
+          type: integer
+          format: int64
+        memory_used_kb:
+          type: integer
+          format: int64
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        solved_problem_number:
+          type: integer
+          format: int32
+        total_score:
+          type: integer
+          format: int32
+    UserRating:
+      type: object
+      properties:
+        contest_id:
+          type: integer
+          format: int64
+        rating:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"

@@ -21,6 +21,15 @@ server:
     include-path: never
     include-binding-errors: never
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+
 app:
   yandex-cloud:
     access-key-id: ${YANDEX_CLOUD_S3_ACCESS_KEY_ID}
