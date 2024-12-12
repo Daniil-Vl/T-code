@@ -33,9 +33,11 @@ T-Code - приложение для решения алгоритмически
 4. Доля запросов с http кодами 4xx и 5xx.
 5. Среднее время обработки запроса
 
-Конфигурация дашборда хранится в директории grafana.
+Конфигурация дашборда (json model) хранится в директории grafana.
 
 #### Дашборд
+![Grafana dashboard first](assets/grafana-dashboard-1.png)
+![Grafana dashboard second](assets/grafana-dashboard-2.png)
 
 ## Тестирование
 
