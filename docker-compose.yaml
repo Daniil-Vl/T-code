@@ -10,6 +10,7 @@ services:
     image: ghcr.io/daniil-vl/contest-service:latest
     container_name: contest-service
     env_file: ".env"
+    restart: unless-stopped
     ports:
       - "8080:8080"
     networks:
@@ -20,6 +21,7 @@ services:
     image: ghcr.io/daniil-vl/submission-service:latest
     container_name: submission-service
     env_file: ".env"
+    restart: unless-stopped
     ports:
       - "8090:8090"
     networks:
@@ -29,6 +31,7 @@ services:
 
   contest_db:
     image: postgres:16
+    restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
@@ -42,6 +45,7 @@ services:
 
   submission_db:
     image: postgres:16
+    restart: unless-stopped
     ports:
       - "5433:5432"
     environment:
@@ -88,7 +92,7 @@ services:
   rabbitmq:
     image: rabbitmq:4.0-management
     hostname: rabbitmq
-    restart: always
+    restart: unless-stopped
     environment:
       - RABBITMQ_DEFAULT_USER=rmuser
       - RABBITMQ_DEFAULT_PASS=rmpassword
@@ -112,7 +116,7 @@ services:
       - "2358:2358"
     privileged: true
     <<: *default-logging
-    restart: always
+    restart: unless-stopped
     networks:
       - judge0
 
@@ -125,7 +129,7 @@ services:
       - ./judge0.conf:/judge0.conf:ro
     privileged: true
     <<: *default-logging
-    restart: always
+    restart: unless-stopped
     networks:
       - judge0
 
@@ -137,7 +141,7 @@ services:
     volumes:
       - judge0-data:/var/lib/postgresql/data/
     <<: *default-logging
-    restart: always
+    restart: unless-stopped
     networks:
       - judge0
 
@@ -151,13 +155,14 @@ services:
     ]
     env_file: judge0.conf
     <<: *default-logging
-    restart: always
+    restart: unless-stopped
     networks:
       - judge0
 
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    restart: unless-stopped
     ports:
       - "9090:9090"
     extra_hosts:
@@ -170,12 +175,14 @@ services:
 
   grafana:
     image: grafana/grafana-oss
+    restart: unless-stopped
     ports:
       - "3000:3000"
 
   elasticsearch:
     image: elasticsearch:7.9.1
     container_name: elasticsearch
+    restart: unless-stopped
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -196,6 +203,7 @@ services:
   logstash:
     image: logstash:7.9.1
     container_name: logstash
+    restart: unless-stopped
     ports:
       - "5044:5044"
       - "5045:5045"
@@ -212,6 +220,7 @@ services:
   kibana:
     image: kibana:7.9.1
     container_name: kibana
+    restart: unless-stopped
     ports:
       - "5601:5601"
     volumes:
